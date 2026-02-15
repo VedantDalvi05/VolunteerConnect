@@ -1,51 +1,50 @@
 import { createContext, useState, useEffect, useContext } from 'react';
-import axios from 'axios';
+import authService from '../services/authService';
 
-const AuthContext = createContext();
-
-export const useAuth = () => {
-    return useContext(AuthContext);
-};
+export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    // Set default axios credentials
-    axios.defaults.withCredentials = true;
-
     useEffect(() => {
-        const checkAuth = async () => {
+        const initAuth = async () => {
             try {
-                const { data } = await axios.get('http://localhost:5000/api/auth/check-auth');
-                setUser(data);
+                // Check if user is already logged in via localStorage
+                const storedUser = authService.getCurrentUser();
+                if (storedUser) {
+                    setUser(storedUser);
+                }
+
+                // Optionally verify with backend
+                // const userData = await authService.getMe();
+                // setUser(userData);
             } catch (error) {
+                console.error('Auth initialization error:', error);
+                authService.logout();
                 setUser(null);
             } finally {
                 setLoading(false);
             }
         };
 
-        checkAuth();
+        initAuth();
     }, []);
 
     const login = async (email, password) => {
-        const { data } = await axios.post('http://localhost:5000/api/auth/login', {
-            email,
-            password,
-        });
+        const data = await authService.login(email, password);
         setUser(data);
         return data;
     };
 
     const register = async (userData) => {
-        const { data } = await axios.post('http://localhost:5000/api/auth/register', userData);
+        const data = await authService.register(userData);
         setUser(data);
         return data;
     };
 
     const logout = async () => {
-        await axios.post('http://localhost:5000/api/auth/logout');
+        await authService.logout();
         setUser(null);
     };
 
@@ -63,3 +62,4 @@ export const AuthProvider = ({ children }) => {
         </AuthContext.Provider>
     );
 };
+

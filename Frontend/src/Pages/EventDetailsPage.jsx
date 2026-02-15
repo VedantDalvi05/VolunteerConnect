@@ -33,7 +33,7 @@ const MOCK_EVENT_DETAILS = {
     gallery: ["bg-blue-200", "bg-green-200", "bg-yellow-200", "bg-red-200"] // Placeholders
 };
 
-const EventDetails = () => {
+const EventDetailsPage = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const [isExpanded, setIsExpanded] = useState(false);
@@ -244,4 +244,4 @@ const EventDetails = () => {
     );
 };
 
-export default EventDetails;
+export default EventDetailsPage;

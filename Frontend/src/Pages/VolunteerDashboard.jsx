@@ -3,11 +3,10 @@ import {
     Clock, Calendar, Award, LogOut, Search, Filter, MapPin,
     ChevronRight, Star, Heart
 } from 'lucide-react';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../hooks/useAuth';
 
-const UserDashboard = () => {
+const VolunteerDashboard = () => {
     const { user } = useAuth();
-
     // Mock Data for User Stats
     const stats = [
         { label: 'Hours Contributed', value: '24', icon: Clock, color: 'bg-blue-100 text-blue-600' },
@@ -130,4 +129,4 @@ const UserDashboard = () => {
     );
 };
 
-export default UserDashboard;
+export default VolunteerDashboard;
